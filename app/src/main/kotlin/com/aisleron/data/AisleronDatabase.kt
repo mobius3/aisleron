@@ -37,6 +37,8 @@ import com.aisleron.data.note.NoteDao
 import com.aisleron.data.note.NoteEntity
 import com.aisleron.data.product.ProductDao
 import com.aisleron.data.product.ProductEntity
+import com.aisleron.data.productvariant.ProductVariantDao
+import com.aisleron.data.productvariant.ProductVariantEntity
 
 @Database(
     entities = [
@@ -46,10 +48,11 @@ import com.aisleron.data.product.ProductEntity
         AisleProductEntity::class,
         LoyaltyCardEntity::class,
         LocationLoyaltyCardEntity::class,
-        NoteEntity::class
+        NoteEntity::class,
+        ProductVariantEntity::class
     ],
 
-    version = 7,
+    version = 8,
     autoMigrations = [
         AutoMigration(from = 1, to = 2),
         AutoMigration(from = 2, to = 3),
@@ -57,12 +60,14 @@ import com.aisleron.data.product.ProductEntity
         AutoMigration(from = 4, to = 5),
         AutoMigration(from = 5, to = 6)
         /** Migration from 6 to 7 is done manually to set initial rank values [MIGRATION_6_7] */
+        /** Migration from 7 to 8 adds the productVariants table [MIGRATION_7_8] */
     ]
 )
 abstract class AisleronDatabase : AisleronDb, RoomDatabase() {
     abstract override fun aisleDao(): AisleDao
     abstract override fun locationDao(): LocationDao
     abstract override fun productDao(): ProductDao
+    abstract override fun productVariantDao(): ProductVariantDao
     abstract override fun aisleProductDao(): AisleProductDao
     abstract override fun maintenanceDao(): MaintenanceDao
     abstract override fun loyaltyCardDao(): LoyaltyCardDao
@@ -79,6 +84,23 @@ abstract class AisleronDatabase : AisleronDb, RoomDatabase() {
                 // Not doing this will lead to some really strange behavior when reordering
                 db.execSQL("ALTER TABLE Location ADD COLUMN rank INTEGER NOT NULL DEFAULT 0")
                 db.execSQL("UPDATE Location SET rank = id")
+            }
+        }
+
+        @JvmField
+        val MIGRATION_7_8 = object : Migration(7, 8) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("""
+                    CREATE TABLE IF NOT EXISTS productVariants (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                        productId INTEGER NOT NULL,
+                        barcode TEXT NOT NULL,
+                        createdAt INTEGER NOT NULL DEFAULT 0,
+                        FOREIGN KEY(productId) REFERENCES Product(id) ON UPDATE CASCADE ON DELETE CASCADE
+                    )
+                """.trimIndent())
+                db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_productVariants_barcode ON productVariants(barcode)")
+                db.execSQL("CREATE INDEX IF NOT EXISTS index_productVariants_productId ON productVariants(productId)")
             }
         }
     }

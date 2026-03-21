@@ -29,12 +29,15 @@ import com.aisleron.data.note.NoteMapper
 import com.aisleron.data.note.NoteRepositoryImpl
 import com.aisleron.data.product.ProductMapper
 import com.aisleron.data.product.ProductRepositoryImpl
+import com.aisleron.data.productvariant.ProductVariantMapper
+import com.aisleron.data.productvariant.ProductVariantRepositoryImpl
 import com.aisleron.domain.aisle.AisleRepository
 import com.aisleron.domain.aisleproduct.AisleProductRepository
 import com.aisleron.domain.location.LocationRepository
 import com.aisleron.domain.loyaltycard.LoyaltyCardRepository
 import com.aisleron.domain.note.NoteRepository
 import com.aisleron.domain.product.ProductRepository
+import com.aisleron.domain.productvariant.ProductVariantRepository
 import org.koin.dsl.module
 
 val repositoryModule = module {
@@ -57,6 +60,12 @@ val repositoryModule = module {
     factory<ProductRepository> {
         ProductRepositoryImpl(
             productDao = get(), aisleProductDao = get(), productMapper = ProductMapper()
+        )
+    }
+
+    factory<ProductVariantRepository> {
+        ProductVariantRepositoryImpl(
+            productVariantDao = get(), productVariantMapper = ProductVariantMapper()
         )
     }
 

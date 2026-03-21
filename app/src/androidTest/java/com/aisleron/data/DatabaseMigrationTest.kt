@@ -186,6 +186,36 @@ class DatabaseMigrationTest {
         )
     }
 
+    private fun populateV7Database(db: SupportSQLiteDatabase) {
+        // Version 7 schema has Location.rank as NOT NULL (no default)
+        // Must include rank in INSERT, unlike earlier versions
+        val locationValues = ContentValues()
+        locationValues.put("type", LocationType.HOME.toString())
+        locationValues.put("defaultFilter", FilterType.NEEDED.toString())
+        locationValues.put("name", "Home")
+        locationValues.put("pinned", false)
+        locationValues.put("rank", 1)  // Required in V7+
+
+        val locationId = db.insert(
+            "Location", android.database.sqlite.SQLiteDatabase.CONFLICT_FAIL, locationValues
+        )
+
+        val aisleValues = ContentValues()
+        aisleValues.put("name", "No Aisle")
+        aisleValues.put("locationId", locationId)
+        aisleValues.put("rank", 1)
+        aisleValues.put("isDefault", true)
+
+        db.insert("Aisle", android.database.sqlite.SQLiteDatabase.CONFLICT_FAIL, aisleValues)
+
+        val productValues = ContentValues()
+        productValues.put("name", "Migration Test Product")
+        productValues.put("inStock", true)
+        productValues.put("qtyNeeded", 10)
+
+        db.insert("Product", android.database.sqlite.SQLiteDatabase.CONFLICT_FAIL, productValues)
+    }
+
     @Test
     @Throws(IOException::class)
     fun migrate5to6() {
@@ -255,6 +285,27 @@ class DatabaseMigrationTest {
 
     @Test
     @Throws(IOException::class)
+    fun migrate7to8() {
+        helper.createDatabase(testDb, 7).apply {
+            populateV7Database(this)
+            close()
+        }
+
+        val db = helper.runMigrationsAndValidate(testDb, 8, true, AisleronDatabase.MIGRATION_7_8)
+
+        db.apply {
+            // Check productVariants table exists and has correct schema
+            val queryVariants = SupportSQLiteQueryBuilder.builder("productVariants")
+            val cursorVariants: Cursor = query(queryVariants.create())
+            assertEquals(0, cursorVariants.count)
+            cursorVariants.close()
+
+            close()
+        }
+    }
+
+    @Test
+    @Throws(IOException::class)
     fun migrateAll() = runTest {
         helper.createDatabase(testDb, 1).apply {
             populateV1Database(this)
@@ -266,7 +317,7 @@ class DatabaseMigrationTest {
             AisleronDatabase::class.java,
             testDb
         )
-            .addMigrations(AisleronDatabase.MIGRATION_6_7)
+            .addMigrations(AisleronDatabase.MIGRATION_6_7, AisleronDatabase.MIGRATION_7_8)
             .build()
 
         // LoyaltyCard introduced in V3
@@ -292,6 +343,10 @@ class DatabaseMigrationTest {
         val location = db.locationDao().getLocations().first()
         assertEquals(true, location.expanded)
         assertEquals(location.id, location.rank)
+
+        // ProductVariant introduced in V8
+        val variants = db.productVariantDao().getByProductId(product.id)
+        assertNotNull(variants)
 
         db.close()
     }

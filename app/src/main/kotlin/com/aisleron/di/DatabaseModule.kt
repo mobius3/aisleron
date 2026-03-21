@@ -34,7 +34,7 @@ val databaseModule = module {
             AisleronDatabase::class.java,
             "aisleron.db"
         )
-            .addMigrations(AisleronDatabase.MIGRATION_6_7)
+            .addMigrations(AisleronDatabase.MIGRATION_6_7, AisleronDatabase.MIGRATION_7_8)
             .addCallback(object : RoomDatabase.Callback() {
                 override fun onCreate(db: SupportSQLiteDatabase) {
                     super.onCreate(db)
