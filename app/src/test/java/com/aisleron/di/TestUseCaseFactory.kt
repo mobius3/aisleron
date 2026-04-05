@@ -108,6 +108,13 @@ import com.aisleron.domain.product.usecase.UpdateProductStatusUseCase
 import com.aisleron.domain.product.usecase.UpdateProductStatusUseCaseImpl
 import com.aisleron.domain.product.usecase.UpdateProductUseCase
 import com.aisleron.domain.product.usecase.UpdateProductUseCaseImpl
+import com.aisleron.domain.productvariant.usecase.AddProductVariantUseCase
+import com.aisleron.domain.productvariant.usecase.AddProductVariantUseCaseImpl
+import com.aisleron.domain.productvariant.usecase.GetProductVariantByBarcodeUseCase
+import com.aisleron.domain.productvariant.usecase.GetProductVariantsByProductIdUseCase
+import com.aisleron.domain.productvariant.usecase.IsBarcodeUniqueUseCase
+import com.aisleron.domain.productvariant.usecase.RemoveProductVariantUseCase
+import com.aisleron.domain.productvariant.usecase.RemoveProductVariantUseCaseImpl
 import com.aisleron.domain.sampledata.usecase.CreateSampleDataUseCase
 import com.aisleron.domain.sampledata.usecase.CreateSampleDataUseCaseImpl
 import com.aisleron.domain.shoppinglist.usecase.GetShoppingListUseCase
@@ -457,6 +464,40 @@ class TestUseCaseFactory(private val repositoryFactory: TestRepositoryFactory) {
     }
 
     /**
+     * Product Variant Use Cases
+     */
+    val getProductVariantByBarcodeUseCase: GetProductVariantByBarcodeUseCase by lazy {
+        GetProductVariantByBarcodeUseCase(
+            productVariantRepository = repositoryFactory.productVariantRepository
+        )
+    }
+
+    val getProductVariantsByProductIdUseCase: GetProductVariantsByProductIdUseCase by lazy {
+        GetProductVariantsByProductIdUseCase(
+            productVariantRepository = repositoryFactory.productVariantRepository
+        )
+    }
+
+    val isBarcodeUniqueUseCase: IsBarcodeUniqueUseCase by lazy {
+        IsBarcodeUniqueUseCase(
+            productVariantRepository = repositoryFactory.productVariantRepository
+        )
+    }
+
+    val addProductVariantUseCase: AddProductVariantUseCase by lazy {
+        AddProductVariantUseCaseImpl(
+            productVariantRepository = repositoryFactory.productVariantRepository,
+            productRepository = repositoryFactory.productRepository
+        )
+    }
+
+    val removeProductVariantUseCase: RemoveProductVariantUseCase by lazy {
+        RemoveProductVariantUseCaseImpl(
+            productVariantRepository = repositoryFactory.productVariantRepository
+        )
+    }
+
+    /**
      * Sample Data Use Case
      */
     val createSampleDataUseCase: CreateSampleDataUseCase by lazy {
@@ -556,6 +597,13 @@ class TestUseCaseFactory(private val repositoryFactory: TestRepositoryFactory) {
             RemoveProductUseCase::class -> removeProductUseCase as T
             UpdateProductStatusUseCase::class -> updateProductStatusUseCase as T
             UpdateProductUseCase::class -> updateProductUseCase as T
+
+            // Product Variant Use Cases
+            GetProductVariantByBarcodeUseCase::class -> getProductVariantByBarcodeUseCase as T
+            GetProductVariantsByProductIdUseCase::class -> getProductVariantsByProductIdUseCase as T
+            IsBarcodeUniqueUseCase::class -> isBarcodeUniqueUseCase as T
+            AddProductVariantUseCase::class -> addProductVariantUseCase as T
+            RemoveProductVariantUseCase::class -> removeProductVariantUseCase as T
 
             // Create Sample Data Use Case
             CreateSampleDataUseCase::class -> createSampleDataUseCase as T

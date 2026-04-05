@@ -30,12 +30,16 @@ import com.aisleron.data.note.NoteMapper
 import com.aisleron.data.note.NoteRepositoryImpl
 import com.aisleron.data.product.ProductMapper
 import com.aisleron.data.product.ProductRepositoryImpl
+import com.aisleron.data.productvariant.ProductVariantMapper
+import com.aisleron.data.productvariant.ProductVariantRepositoryImpl
 import com.aisleron.domain.aisle.AisleRepository
 import com.aisleron.domain.aisleproduct.AisleProductRepository
+import com.aisleron.domain.productvariant.ProductVariantRepository
 import com.aisleron.domain.location.LocationRepository
 import com.aisleron.domain.loyaltycard.LoyaltyCardRepository
 import com.aisleron.domain.note.NoteRepository
 import com.aisleron.domain.product.ProductRepository
+import com.aisleron.domain.productvariant.ProductVariantRepository
 
 class TestRepositoryFactory(private val db: AisleronDb) {
     val aisleRepository: AisleRepository by lazy {
@@ -70,6 +74,10 @@ class TestRepositoryFactory(private val db: AisleronDb) {
         NoteRepositoryImpl(db.noteDao(), NoteMapper())
     }
 
+    val productVariantRepository: ProductVariantRepository by lazy {
+        ProductVariantRepositoryImpl(db.productVariantDao(), ProductVariantMapper())
+    }
+
     inline fun <reified T> get(): T {
         return when (T::class) {
             AisleRepository::class -> aisleRepository as T
@@ -78,6 +86,7 @@ class TestRepositoryFactory(private val db: AisleronDb) {
             LocationRepository::class -> locationRepository as T
             LoyaltyCardRepository::class -> loyaltyCardRepository as T
             NoteRepository::class -> noteRepository as T
+            ProductVariantRepository::class -> productVariantRepository as T
 
             else -> throw Exception("Unknown repository ${T::class}")
         }

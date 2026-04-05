@@ -120,6 +120,13 @@ import com.aisleron.domain.product.usecase.UpdateProductStatusUseCase
 import com.aisleron.domain.product.usecase.UpdateProductStatusUseCaseImpl
 import com.aisleron.domain.product.usecase.UpdateProductUseCase
 import com.aisleron.domain.product.usecase.UpdateProductUseCaseImpl
+import com.aisleron.domain.productvariant.usecase.AddProductVariantUseCase
+import com.aisleron.domain.productvariant.usecase.AddProductVariantUseCaseImpl
+import com.aisleron.domain.productvariant.usecase.GetProductVariantByBarcodeUseCase
+import com.aisleron.domain.productvariant.usecase.GetProductVariantsByProductIdUseCase
+import com.aisleron.domain.productvariant.usecase.IsBarcodeUniqueUseCase
+import com.aisleron.domain.productvariant.usecase.RemoveProductVariantUseCase
+import com.aisleron.domain.productvariant.usecase.RemoveProductVariantUseCaseImpl
 import com.aisleron.domain.sampledata.usecase.CreateSampleDataUseCase
 import com.aisleron.domain.sampledata.usecase.CreateSampleDataUseCaseImpl
 import com.aisleron.domain.shoppinglist.usecase.GetShoppingListUseCase
@@ -451,5 +458,31 @@ val useCaseModule = module {
             getLocationUseCase = get(),
             getNoteUseCase = get()
         )
+    }
+
+    /**
+     * Product Variant Use Cases
+     */
+    factory<GetProductVariantByBarcodeUseCase> {
+        GetProductVariantByBarcodeUseCase(productVariantRepository = get())
+    }
+
+    factory<GetProductVariantsByProductIdUseCase> {
+        GetProductVariantsByProductIdUseCase(productVariantRepository = get())
+    }
+
+    factory<IsBarcodeUniqueUseCase> {
+        IsBarcodeUniqueUseCase(productVariantRepository = get())
+    }
+
+    factory<AddProductVariantUseCase> {
+        AddProductVariantUseCaseImpl(
+            productVariantRepository = get(),
+            productRepository = get()
+        )
+    }
+
+    factory<RemoveProductVariantUseCase> {
+        RemoveProductVariantUseCaseImpl(productVariantRepository = get())
     }
 }
