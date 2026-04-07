@@ -107,6 +107,8 @@ import com.aisleron.domain.product.usecase.AddProductUseCaseImpl
 import com.aisleron.domain.product.usecase.CopyProductUseCase
 import com.aisleron.domain.product.usecase.CopyProductUseCaseImpl
 import com.aisleron.domain.product.usecase.GetAllProductsUseCase
+import com.aisleron.domain.product.usecase.GetProductByBarcodeUseCase
+import com.aisleron.domain.product.usecase.GetProductByBarcodeUseCaseImpl
 import com.aisleron.domain.product.usecase.GetProductMappingsUseCase
 import com.aisleron.domain.product.usecase.GetProductMappingsUseCaseImpl
 import com.aisleron.domain.product.usecase.GetProductUseCase
@@ -116,6 +118,8 @@ import com.aisleron.domain.product.usecase.RemoveProductUseCase
 import com.aisleron.domain.product.usecase.RemoveProductUseCaseImpl
 import com.aisleron.domain.product.usecase.UpdateProductQtyNeededUseCase
 import com.aisleron.domain.product.usecase.UpdateProductQtyNeededUseCaseImpl
+import com.aisleron.domain.product.usecase.UpdateProductStatusByBarcodeUseCase
+import com.aisleron.domain.product.usecase.UpdateProductStatusByBarcodeUseCaseImpl
 import com.aisleron.domain.product.usecase.UpdateProductStatusUseCase
 import com.aisleron.domain.product.usecase.UpdateProductStatusUseCaseImpl
 import com.aisleron.domain.product.usecase.UpdateProductUseCase
@@ -484,5 +488,22 @@ val useCaseModule = module {
 
     factory<RemoveProductVariantUseCase> {
         RemoveProductVariantUseCaseImpl(productVariantRepository = get())
+    }
+
+    /**
+     * Barcode Product Use Cases
+     */
+    factory<GetProductByBarcodeUseCase> {
+        GetProductByBarcodeUseCaseImpl(
+            productVariantRepository = get(),
+            getProductUseCase = get()
+        )
+    }
+
+    factory<UpdateProductStatusByBarcodeUseCase> {
+        UpdateProductStatusByBarcodeUseCaseImpl(
+            getProductByBarcodeUseCase = get(),
+            updateProductStatusUseCase = get()
+        )
     }
 }

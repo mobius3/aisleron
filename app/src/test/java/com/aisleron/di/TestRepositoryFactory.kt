@@ -34,7 +34,6 @@ import com.aisleron.data.productvariant.ProductVariantMapper
 import com.aisleron.data.productvariant.ProductVariantRepositoryImpl
 import com.aisleron.domain.aisle.AisleRepository
 import com.aisleron.domain.aisleproduct.AisleProductRepository
-import com.aisleron.domain.productvariant.ProductVariantRepository
 import com.aisleron.domain.location.LocationRepository
 import com.aisleron.domain.loyaltycard.LoyaltyCardRepository
 import com.aisleron.domain.note.NoteRepository

@@ -97,6 +97,8 @@ import com.aisleron.domain.product.usecase.AddProductUseCaseImpl
 import com.aisleron.domain.product.usecase.CopyProductUseCase
 import com.aisleron.domain.product.usecase.CopyProductUseCaseImpl
 import com.aisleron.domain.product.usecase.GetAllProductsUseCase
+import com.aisleron.domain.product.usecase.GetProductByBarcodeUseCase
+import com.aisleron.domain.product.usecase.GetProductByBarcodeUseCaseImpl
 import com.aisleron.domain.product.usecase.GetProductMappingsUseCase
 import com.aisleron.domain.product.usecase.GetProductMappingsUseCaseImpl
 import com.aisleron.domain.product.usecase.GetProductUseCase
@@ -104,6 +106,8 @@ import com.aisleron.domain.product.usecase.GetProductUseCaseImpl
 import com.aisleron.domain.product.usecase.IsProductNameUniqueUseCase
 import com.aisleron.domain.product.usecase.RemoveProductUseCase
 import com.aisleron.domain.product.usecase.RemoveProductUseCaseImpl
+import com.aisleron.domain.product.usecase.UpdateProductStatusByBarcodeUseCase
+import com.aisleron.domain.product.usecase.UpdateProductStatusByBarcodeUseCaseImpl
 import com.aisleron.domain.product.usecase.UpdateProductStatusUseCase
 import com.aisleron.domain.product.usecase.UpdateProductStatusUseCaseImpl
 import com.aisleron.domain.product.usecase.UpdateProductUseCase
@@ -463,6 +467,20 @@ class TestUseCaseFactory(private val repositoryFactory: TestRepositoryFactory) {
         )
     }
 
+    val getProductByBarcodeUseCase: GetProductByBarcodeUseCase by lazy {
+        GetProductByBarcodeUseCaseImpl(
+            productVariantRepository = repositoryFactory.productVariantRepository,
+            getProductUseCase = getProductUseCase
+        )
+    }
+
+    val updateProductStatusByBarcodeUseCase: UpdateProductStatusByBarcodeUseCase by lazy {
+        UpdateProductStatusByBarcodeUseCaseImpl(
+            getProductByBarcodeUseCase = getProductByBarcodeUseCase,
+            updateProductStatusUseCase = updateProductStatusUseCase
+        )
+    }
+
     /**
      * Product Variant Use Cases
      */
@@ -591,10 +609,12 @@ class TestUseCaseFactory(private val repositoryFactory: TestRepositoryFactory) {
             AddProductUseCase::class -> addProductUseCase as T
             CopyProductUseCase::class -> copyProductUseCase as T
             GetAllProductsUseCase::class -> getAllProductsUseCase as T
+            GetProductByBarcodeUseCase::class -> getProductByBarcodeUseCase as T
             GetProductUseCase::class -> getProductUseCase as T
             GetProductMappingsUseCase::class -> getProductMappingsUseCase as T
             IsProductNameUniqueUseCase::class -> isProductNameUniqueUseCase as T
             RemoveProductUseCase::class -> removeProductUseCase as T
+            UpdateProductStatusByBarcodeUseCase::class -> updateProductStatusByBarcodeUseCase as T
             UpdateProductStatusUseCase::class -> updateProductStatusUseCase as T
             UpdateProductUseCase::class -> updateProductUseCase as T
 
