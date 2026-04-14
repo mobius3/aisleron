@@ -23,6 +23,7 @@ import android.os.Parcelable
 import com.aisleron.domain.FilterType
 import com.aisleron.domain.location.LocationType
 import com.aisleron.ui.aisle.AisleDialogFragment
+import com.aisleron.ui.barcode.ScanMode
 import com.aisleron.ui.copyentity.CopyEntityType
 import com.aisleron.ui.note.NoteParentRef
 import com.aisleron.ui.shoppinglist.ShoppingListGrouping
@@ -183,6 +184,27 @@ class Bundler {
         return result ?: AislePickerBundle()
     }
 
+    fun makeBarcodeScannerBundle(
+        productId: Int? = null,
+        scanMode: ScanMode = ScanMode.ADD_VARIANT,
+        locationId: Int? = null,
+        filterType: String? = null
+    ): Bundle {
+        val barcodeScannerBundle = BarcodeScannerBundle(
+            productId = productId,
+            scanMode = scanMode,
+            locationId = locationId,
+            filterType = filterType
+        )
+        return makeParcelableBundle(BARCODE_SCANNER, barcodeScannerBundle)
+    }
+
+    fun getBarcodeScannerBundle(bundle: Bundle?): BarcodeScannerBundle {
+        val result =
+            getParcelableBundle(bundle, BARCODE_SCANNER, BarcodeScannerBundle::class.java)
+        return result ?: BarcodeScannerBundle()
+    }
+
     fun makeAisleDialogBundle(
         aisleId: Int,
         action: AisleDialogFragment.AisleDialogAction,
@@ -210,6 +232,7 @@ class Bundler {
         const val NOTE_DIALOG = "noteDialog"
         const val AISLE_PICKER = "aislePicker"
         const val AISLE_DIALOG = "aisleDialog"
+        const val BARCODE_SCANNER = "barcodeScanner"
 
 
         const val ARG_LOCATION_ID = "locationId"
