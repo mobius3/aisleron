@@ -62,13 +62,13 @@ class BarcodeValidatorTest {
 
     @Test
     fun isValidBarcode_ValidCode128_ReturnsTrue() {
-        // Code 128 can be alphanumeric
-        assertTrue(BarcodeValidator.isValidBarcode("ABC123"))
+        // Code 128 can be alphanumeric (minimum 8 chars)
+        assertTrue(BarcodeValidator.isValidBarcode("ABC12345"))
     }
 
     @Test
     fun isValidBarcode_ValidCode39_ReturnsTrue() {
-        // Code 39 supports letters, numbers, and some special chars
+        // Code 39 supports letters, numbers, and some special chars (minimum 4 chars)
         assertTrue(BarcodeValidator.isValidBarcode("CODE39"))
     }
 

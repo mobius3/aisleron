@@ -112,10 +112,10 @@ object BarcodeValidator {
      * as it requires knowing the Code Set (A, B, or C).
      */
     fun isValidCode128(barcode: String): Boolean {
-        // Code 128 can contain any ASCII character
-        // Minimum practical length is 1 (start + stop + check = 3 minimum encoded)
+        // Code 128 can contain any printable ASCII character
+        // Minimum practical length of 8 to avoid false positives
         // Maximum typically 48 characters for barcode readability
-        return barcode.isNotEmpty() &&
+        return barcode.length >= 8 &&
                 barcode.length <= 48 &&
                 barcode.all { it.code in 32..126 } // Printable ASCII
     }
@@ -134,7 +134,7 @@ object BarcodeValidator {
             '/', '+', '%'
         )
 
-        return barcode.isNotEmpty() &&
+        return barcode.length >= 4 &&
                 barcode.length <= 48 &&
                 barcode.uppercase().all { it in validChars }
     }

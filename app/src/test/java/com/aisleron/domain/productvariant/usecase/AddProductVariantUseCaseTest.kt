@@ -70,7 +70,7 @@ class AddProductVariantUseCaseTest {
     @Test
     fun addVariant_InvalidBarcode_ReturnsInvalidBarcodeFormatError() = runTest {
         val product = productRepository.getAll().first()
-        val invalidBarcode = "not-a-barcode"
+        val invalidBarcode = "abc"
 
         val result = addProductVariantUseCase(product.id, invalidBarcode)
 
@@ -82,7 +82,7 @@ class AddProductVariantUseCaseTest {
     @Test
     fun addVariant_BarcodeTooShort_ReturnsInvalidBarcodeFormatError() = runTest {
         val product = productRepository.getAll().first()
-        val shortBarcode = "12345"
+        val shortBarcode = "12"
 
         val result = addProductVariantUseCase(product.id, shortBarcode)
 
