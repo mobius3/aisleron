@@ -31,6 +31,9 @@ import com.aisleron.domain.preferences.TrackingMode
 import com.aisleron.domain.product.usecase.AddProductUseCase
 import com.aisleron.domain.product.usecase.GetProductMappingsUseCase
 import com.aisleron.domain.product.usecase.UpdateProductUseCase
+import com.aisleron.domain.productvariant.usecase.AddProductVariantUseCase
+import com.aisleron.domain.productvariant.usecase.GetProductVariantsByProductIdUseCase
+import com.aisleron.domain.productvariant.usecase.RemoveProductVariantUseCase
 import com.aisleron.ui.bundles.AisleListEntry
 import com.aisleron.ui.bundles.AislePickerBundle
 import com.aisleron.ui.note.NoteParentRef
@@ -38,6 +41,7 @@ import com.aisleron.ui.note.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
@@ -53,8 +57,11 @@ class ProductViewModel(
     private val getProductMappingsUseCase: GetProductMappingsUseCase,
     private val getAislesForLocationUseCase: GetAislesForLocationUseCase,
     private val changeProductAisleUseCase: ChangeProductAisleUseCase,
+    private val getProductVariantsByProductIdUseCase: GetProductVariantsByProductIdUseCase,
+    private val addProductVariantUseCase: AddProductVariantUseCase,
+    private val removeProductVariantUseCase: RemoveProductVariantUseCase,
     coroutineScopeProvider: CoroutineScope? = null
-) : ViewModel(), NoteViewModel, ProductInventoryViewModel {
+) : ViewModel(), NoteViewModel, ProductInventoryViewModel, ProductVariantsViewModel {
     private var _targetAisleId: Int? = null
 
     private var product: Product? = null
@@ -68,6 +75,10 @@ class ProductViewModel(
     private val _productAisles = MutableStateFlow<List<ProductAisleInfo>>(emptyList())
     val productAisles: StateFlow<List<ProductAisleInfo>> = _productAisles
 
+    private val _originalVariants = MutableStateFlow<List<VariantUiModel>>(emptyList())
+    private val _productVariants = MutableStateFlow<List<VariantUiModel>>(emptyList())
+    override val variants: StateFlow<List<VariantUiModel>> = _productVariants
+
     private val _productUiState = MutableStateFlow<ProductUiState>(ProductUiState.Empty)
     val productUiState: StateFlow<ProductUiState> = _productUiState
 
@@ -78,12 +89,11 @@ class ProductViewModel(
     val editingAisleInfo: ProductAisleInfo? get() = _editingAisleInfo
 
     val isDirty: StateFlow<Boolean> = combine(
-        _originalData,
-        _uiData,
-        _originalAisles,
-        _productAisles
-    ) { originalData, currentData, originalAisles, currentAisles ->
-        (originalData != currentData) || (originalAisles != currentAisles)
+        combine(_originalData, _uiData) { original, current -> original != current },
+        combine(_originalAisles, _productAisles) { original, current -> original != current },
+        combine(_originalVariants, _productVariants) { original, current -> original != current }
+    ) { dataDirty, aislesDirty, variantsDirty ->
+        dataDirty || aislesDirty || variantsDirty
     }.stateIn(
         scope = coroutineScope,
         started = SharingStarted.WhileSubscribed(5000),
@@ -119,6 +129,9 @@ class ProductViewModel(
 
             loadProductAisleList(product?.id ?: -1)
             _originalAisles.value = _productAisles.value
+
+            loadProductVariants(product?.id ?: -1)
+            _originalVariants.value = _productVariants.value
 
             _productUiState.value = ProductUiState.Empty
             hydrated = true
@@ -160,6 +173,24 @@ class ProductViewModel(
         coroutineScope.launch {
             loadProductAisleList(product?.id ?: -1)
         }
+    }
+
+    private suspend fun loadProductVariants(productId: Int) {
+        if (productId <= 0) return
+        val variantList = getProductVariantsByProductIdUseCase(productId).first()
+        _productVariants.value = variantList.map {
+            VariantUiModel(id = it.id, barcode = it.barcode)
+        }
+    }
+
+    override fun addVariant(barcode: String) {
+        val current = _productVariants.value
+        if (current.any { it.barcode == barcode }) return
+        _productVariants.value = current + VariantUiModel(id = 0, barcode = barcode)
+    }
+
+    override fun removeVariant(variantId: Int) {
+        _productVariants.value = _productVariants.value.filter { it.id != variantId }
     }
 
     fun requestLocationAisles(item: ProductAisleInfo) {
@@ -248,10 +279,23 @@ class ProductViewModel(
                     aisles.filter { it.aisleId != it.initialAisleId }.forEach {
                         changeProductAisleUseCase(p.id, it.initialAisleId, it.aisleId)
                     }
+
+                    // Save variant changes
+                    val originalVariantIds = _originalVariants.value.map { it.id }.toSet()
+                    val currentVariantIds = _productVariants.value.map { it.id }.toSet()
+
+                    _originalVariants.value.filter { it.id !in currentVariantIds && it.id > 0 }.forEach {
+                        removeProductVariantUseCase(it.id)
+                    }
+
+                    _productVariants.value.filter { it.id == 0 }.forEach { variant ->
+                        addProductVariantUseCase(p.id, variant.barcode)
+                    }
                 }
 
                 _originalData.value = _uiData.value
                 _originalAisles.value = _productAisles.value
+                _originalVariants.value = _productVariants.value
                 _productUiState.value = ProductUiState.Success
             } catch (e: AisleronException) {
                 _productUiState.value = ProductUiState.Error(e.exceptionCode, e.message)
