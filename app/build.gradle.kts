@@ -237,6 +237,7 @@ dependencies {
     implementation("androidx.camera:camera-camera2:${Versions.CAMERA}")
     implementation("androidx.camera:camera-lifecycle:${Versions.CAMERA}")
     implementation("androidx.camera:camera-view:${Versions.CAMERA}")
+    implementation("com.google.guava:guava:33.4.8-android")
 
     // Testing
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
