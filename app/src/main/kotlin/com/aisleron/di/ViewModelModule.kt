@@ -19,6 +19,7 @@ package com.aisleron.di
 
 import com.aisleron.ui.about.AboutViewModel
 import com.aisleron.ui.aisle.AisleViewModel
+import com.aisleron.ui.barcode.BarcodeScanViewModel
 import com.aisleron.ui.copyentity.CopyEntityViewModel
 import com.aisleron.ui.note.NoteDialogViewModel
 import com.aisleron.ui.product.ProductViewModel
@@ -116,5 +117,9 @@ val viewModelModule = module {
             getNoteParentUseCase = get(),
             applyNoteChangesUseCase = get()
         )
+    }
+
+    viewModel {
+        BarcodeScanViewModel()
     }
 }
