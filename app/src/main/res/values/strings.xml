@@ -260,4 +260,7 @@
     <string name="barcode_camera_error">Camera is not available</string>
     <string name="barcode_scan_result_found">Product found: %s</string>
     <string name="barcode_scan_result_not_found">No product found for this barcode</string>
+    <string name="barcode_no_barcodes_added">No barcodes added</string>
+    <string name="barcode_scan_barcode">Scan barcode</string>
+    <string name="barcode_remove">Remove barcode</string>
 </resources>
