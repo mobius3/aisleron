@@ -127,4 +127,9 @@
         android:name="com.aisleron.ui.welcome.WelcomeFragment"
         android:label="@string/welcome_app_title"
         tools:layout="@layout/fragment_welcome" />
+    <fragment
+        android:id="@+id/nav_barcode_scanner"
+        android:name="com.aisleron.ui.barcode.CameraBarcodeScannerFragment"
+        android:label="@string/barcode_scanning"
+        tools:layout="@layout/fragment_camera_barcode_scanner" />
 </navigation>
