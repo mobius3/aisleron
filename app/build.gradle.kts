@@ -32,11 +32,13 @@ plugins {
 apply("../gradle/jacoco.gradle")
 
 object Versions {
+    const val CAMERA = "1.4.1"
     const val COROUTINES = "1.10.2"
     const val JUNIT = "6.0.2"
     const val ESPRESSO = "3.7.0"
     const val FRAGMENT = "1.8.9"
     const val LIFECYCLE = "2.10.0"
+    const val MLKIT_BARCODE = "17.3.0"
     const val ROOM = "2.8.4"
     const val KOIN = "4.1.1"
     const val NAVIGATION = "2.9.6"
@@ -229,6 +231,12 @@ dependencies {
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.COROUTINES}")
+
+    // Barcode Scanning
+    implementation("com.google.mlkit:barcode-scanning:${Versions.MLKIT_BARCODE}")
+    implementation("androidx.camera:camera-camera2:${Versions.CAMERA}")
+    implementation("androidx.camera:camera-lifecycle:${Versions.CAMERA}")
+    implementation("androidx.camera:camera-view:${Versions.CAMERA}")
 
     // Testing
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
