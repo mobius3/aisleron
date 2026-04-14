@@ -251,4 +251,13 @@
     <string name="save_changes_message">You have unsaved changes. Do you want to save them before leaving?</string>
     <string name="keep_editing">Keep Editing</string>
     <string name="show_location_list">Show %1$s</string>
+    <string name="barcode_scan_hint">Point the camera at a barcode</string>
+    <string name="barcode_manual_entry">Enter manually</string>
+    <string name="barcode_scanning">Scanning…</string>
+    <string name="barcode_enter_barcode">Enter barcode</string>
+    <string name="barcode_invalid_format">Invalid barcode format</string>
+    <string name="barcode_camera_permission_required">Camera permission is required to scan barcodes</string>
+    <string name="barcode_camera_error">Camera is not available</string>
+    <string name="barcode_scan_result_found">Product found: %s</string>
+    <string name="barcode_scan_result_not_found">No product found for this barcode</string>
 </resources>
