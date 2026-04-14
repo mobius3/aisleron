@@ -70,7 +70,10 @@ val viewModelModule = module {
             getAisleUseCase = get(),
             getProductMappingsUseCase = get(),
             getAislesForLocationUseCase = get(),
-            changeProductAisleUseCase = get()
+            changeProductAisleUseCase = get(),
+            getProductVariantsByProductIdUseCase = get(),
+            addProductVariantUseCase = get(),
+            removeProductVariantUseCase = get()
         )
     }
 
