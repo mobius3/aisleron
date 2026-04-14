@@ -81,6 +81,12 @@ class ProductVariantDaoTestImpl(
         }
     }
 
+    override suspend fun getProductIdsWithVariants(productIds: List<Int>): List<Int> =
+        variants.map { it.productId }.distinct().filter { it in productIds }
+
+    override suspend fun hasVariants(productId: Int): Boolean =
+        variants.any { it.productId == productId }
+
     fun clear() {
         variants.clear()
     }

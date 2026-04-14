@@ -37,6 +37,7 @@ class ProductRepositoryImplTest : RepositoryImplTest<Product>() {
         ProductRepositoryImpl(
             productDao = get<ProductDao>(),
             aisleProductDao = get<AisleProductDao>(),
+            productVariantDao = get(),
             productMapper = ProductMapper()
         )
 

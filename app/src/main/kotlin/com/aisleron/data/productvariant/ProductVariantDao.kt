@@ -47,6 +47,12 @@ interface ProductVariantDao : BaseDao<ProductVariantEntity> {
     @Query("DELETE FROM productVariants WHERE barcode = :barcode")
     suspend fun deleteByBarcode(barcode: BarcodeDeleteHelper): Int
 
+    @Query("SELECT DISTINCT productId FROM productVariants WHERE productId IN (:productIds)")
+    suspend fun getProductIdsWithVariants(productIds: List<Int>): List<Int>
+
+    @Query("SELECT EXISTS(SELECT 1 FROM productVariants WHERE productId = :productId LIMIT 1)")
+    suspend fun hasVariants(productId: Int): Boolean
+
     @JvmInline
     value class BarcodeDeleteHelper(val value: String)
 }

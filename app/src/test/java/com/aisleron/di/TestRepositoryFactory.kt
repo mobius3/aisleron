@@ -49,6 +49,7 @@ class TestRepositoryFactory(private val db: AisleronDb) {
         ProductRepositoryImpl(
             db.productDao(),
             db.aisleProductDao(),
+            db.productVariantDao(),
             ProductMapper()
         )
     }

@@ -18,24 +18,34 @@
 package com.aisleron.data.product
 
 import com.aisleron.data.aisleproduct.AisleProductDao
+import com.aisleron.data.productvariant.ProductVariantDao
 import com.aisleron.domain.product.Product
 import com.aisleron.domain.product.ProductRepository
 
 class ProductRepositoryImpl(
     private val productDao: ProductDao,
     private val aisleProductDao: AisleProductDao,
+    private val productVariantDao: ProductVariantDao,
     private val productMapper: ProductMapper
 ) : ProductRepository {
     override suspend fun getByName(name: String): Product? {
-        return productDao.getProductByName(name.trim())?.let { productMapper.toModel(it) }
+        return productDao.getProductByName(name.trim())?.let {
+            val product = productMapper.toModel(it)
+            product.copy(hasVariants = productVariantDao.hasVariants(product.id))
+        }
     }
 
     override suspend fun get(id: Int): Product? {
-        return productDao.getProduct(id)?.let { productMapper.toModel(it) }
+        return productDao.getProduct(id)?.let {
+            val product = productMapper.toModel(it)
+            product.copy(hasVariants = productVariantDao.hasVariants(product.id))
+        }
     }
 
     override suspend fun getAll(): List<Product> {
-        return productMapper.toModelList(productDao.getProducts())
+        val products = productMapper.toModelList(productDao.getProducts())
+        val idsWithVariants = productVariantDao.getProductIdsWithVariants(products.map { it.id }).toSet()
+        return products.map { it.copy(hasVariants = it.id in idsWithVariants) }
     }
 
     override suspend fun add(item: Product): Int {

@@ -31,5 +31,6 @@ data class Product(
     override val note: Note? = null,
     val qtyIncrement: Double,
     val unitOfMeasure: String,
-    val trackingMode: TrackingMode
+    val trackingMode: TrackingMode,
+    val hasVariants: Boolean = false
 ) : AisleronItem, NoteParent
