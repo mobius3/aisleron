@@ -207,6 +207,7 @@
     <string name="add_aisle_fab">Add Aisle FAB</string>
     <string name="add_product_fab">Add Product FAB</string>
     <string name="search_fab">Search FAB</string>
+    <string name="scan_barcode_fab">Scan Barcode FAB</string>
     <string name="title_activity_about">About Aisleron</string>
     <string name="shopping_list_options_header">Shopping List Options</string>
     <string name="hide_status_change_snack_bar">Hide status change message</string>
@@ -266,4 +267,12 @@
     <string name="barcode_no_barcodes_added">No barcodes added</string>
     <string name="barcode_scan_barcode">Scan barcode</string>
     <string name="barcode_remove">Remove barcode</string>
+    <string name="barcode_scan_result_product_moved">%1$s moved to %2$s</string>
+    <string name="barcode_scan_result_already_in_list">%s is already in this list</string>
+    <string name="barcode_unknown_barcode_value">Barcode: %s</string>
+    <string name="barcode_add_to_existing">Add to existing product</string>
+    <string name="barcode_search_product">Search products</string>
+    <string name="barcode_create_new_product">Create new</string>
+    <string name="barcode_assign_to_product">Assign</string>
+    <string name="barcode_scan_result_assigned">Barcode assigned to product</string>
 </resources>

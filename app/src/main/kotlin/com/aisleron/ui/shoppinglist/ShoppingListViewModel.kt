@@ -22,6 +22,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aisleron.domain.FilterType
 import com.aisleron.domain.base.AisleronException
+import com.aisleron.domain.product.usecase.UpdateProductStatusByBarcodeUseCase
 import com.aisleron.domain.loyaltycard.LoyaltyCard
 import com.aisleron.domain.shoppinglist.ShoppingListFilter
 import com.aisleron.ui.bundles.AisleListEntry
@@ -55,6 +56,7 @@ import kotlin.coroutines.cancellation.CancellationException
 @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
 class ShoppingListViewModel(
     private val shoppingListStreamProviderFactory: ShoppingListCoordinatorFactory,
+    private val updateProductStatusByBarcodeUseCase: UpdateProductStatusByBarcodeUseCase? = null,
     debounceTime: Long = 300,
     coroutineScopeProvider: CoroutineScope? = null
 ) : ViewModel() {
@@ -386,6 +388,39 @@ class ShoppingListViewModel(
 
     fun navigateToAddShop() {
         emitEvent { ShoppingListEvent.NavigateToAddShop }
+    }
+
+    sealed class BarcodeScanResult {
+        data class ProductUpdated(val productName: String, val inStock: Boolean) : BarcodeScanResult()
+        data class ProductAlreadyInStatus(val productName: String) : BarcodeScanResult()
+        data class UnknownBarcode(val barcode: String) : BarcodeScanResult()
+    }
+
+    suspend fun handleBarcodeScanResult(barcode: String): BarcodeScanResult {
+        val useCase = updateProductStatusByBarcodeUseCase
+            ?: return BarcodeScanResult.UnknownBarcode(barcode)
+
+        val targetInStock = when (productFilter) {
+            FilterType.NEEDED -> true
+            FilterType.IN_STOCK -> false
+            FilterType.ALL -> null // toggle handled below
+        }
+
+        val product = useCase(barcode, targetInStock ?: true)
+            ?: return BarcodeScanResult.UnknownBarcode(barcode)
+
+        // For ALL filter, toggle the status
+        val finalProduct = if (targetInStock == null) {
+            useCase(barcode, !product.inStock) ?: product
+        } else {
+            product
+        }
+
+        return if (finalProduct.inStock == product.inStock && targetInStock != null) {
+            BarcodeScanResult.ProductAlreadyInStatus(finalProduct.name)
+        } else {
+            BarcodeScanResult.ProductUpdated(finalProduct.name, finalProduct.inStock)
+        }
     }
 
     sealed class ShoppingListUiState {

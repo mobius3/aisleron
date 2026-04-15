@@ -20,6 +20,9 @@ package com.aisleron.di
 import com.aisleron.ui.about.AboutViewModel
 import com.aisleron.ui.aisle.AisleViewModel
 import com.aisleron.ui.barcode.BarcodeScanViewModel
+import com.aisleron.ui.barcode.UnknownBarcodeViewModel
+import com.aisleron.domain.product.usecase.GetAllProductsUseCase
+import com.aisleron.domain.productvariant.usecase.AddProductVariantUseCase
 import com.aisleron.ui.copyentity.CopyEntityViewModel
 import com.aisleron.ui.note.NoteDialogViewModel
 import com.aisleron.ui.product.ProductViewModel
@@ -34,7 +37,8 @@ import org.koin.dsl.module
 val viewModelModule = module {
     viewModel {
         ShoppingListViewModel(
-            shoppingListStreamProviderFactory = get()
+            shoppingListStreamProviderFactory = get(),
+            updateProductStatusByBarcodeUseCase = get()
         )
     }
 
@@ -124,5 +128,12 @@ val viewModelModule = module {
 
     viewModel {
         BarcodeScanViewModel()
+    }
+
+    viewModel {
+        UnknownBarcodeViewModel(
+            getAllProductsUseCase = get<GetAllProductsUseCase>(),
+            addProductVariantUseCase = get<AddProductVariantUseCase>()
+        )
     }
 }
