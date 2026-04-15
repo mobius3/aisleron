@@ -95,7 +95,8 @@ class ProductFragment(
                 addEditProductBundle.productId,
                 addEditProductBundle.inStock ?: false,
                 addEditProductBundle.aisleId,
-                addEditProductBundle.name
+                addEditProductBundle.name,
+                addEditProductBundle.barcode
             )
         }
     }

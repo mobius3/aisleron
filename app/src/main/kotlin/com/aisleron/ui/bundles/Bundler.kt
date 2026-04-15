@@ -56,14 +56,15 @@ class Bundler {
     }
 
     fun makeAddProductBundle(
-        name: String? = null, inStock: Boolean = false, aisleId: Int? = null
+        name: String? = null, inStock: Boolean = false, aisleId: Int? = null,
+        barcode: String? = null
     ): Bundle {
         val addProductBundle = AddEditProductBundle(
             name = name,
             inStock = inStock,
             actionType = AddEditProductBundle.ProductAction.ADD,
-            aisleId = aisleId
-
+            aisleId = aisleId,
+            barcode = barcode
         )
         return makeParcelableBundle(ADD_EDIT_PRODUCT, addProductBundle)
     }

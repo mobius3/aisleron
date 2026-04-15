@@ -109,9 +109,12 @@ class ProductViewModel(
 
     private var hydrated = false
 
-    fun hydrate(productId: Int, inStock: Boolean, targetAisleId: Int? = null, name: String? = "") {
+    private var pendingBarcode: String? = null
+
+    fun hydrate(productId: Int, inStock: Boolean, targetAisleId: Int? = null, name: String? = "", barcode: String? = null) {
         if (hydrated) return
 
+        pendingBarcode = barcode
         coroutineScope.launch {
             _targetAisleId = targetAisleId
             _productUiState.value = ProductUiState.Loading
@@ -269,6 +272,14 @@ class ProductViewModel(
                     )
 
                     product = getProduct(id)
+                }
+
+                // Auto-add pending barcode from unknown barcode flow
+                pendingBarcode?.let { bc ->
+                    product?.let { p ->
+                        addProductVariantUseCase(p.id, bc)
+                    }
+                    pendingBarcode = null
                 }
 
                 product?.let { p ->

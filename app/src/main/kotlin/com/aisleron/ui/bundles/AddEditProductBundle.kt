@@ -26,7 +26,8 @@ data class AddEditProductBundle(
     val actionType: ProductAction = ProductAction.ADD,
     val name: String? = null,
     val inStock: Boolean? = null,
-    val aisleId: Int? = null
+    val aisleId: Int? = null,
+    val barcode: String? = null
 ) : Parcelable {
     enum class ProductAction {
         ADD, EDIT
