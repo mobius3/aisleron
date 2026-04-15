@@ -38,8 +38,9 @@ val viewModelTestModule = module {
     viewModel {
         ShoppingListViewModel(
             shoppingListStreamProviderFactory = get(),
+            updateProductStatusByBarcodeUseCase = get(),
             debounceTime = 0,
-            TestScope(UnconfinedTestDispatcher())
+            coroutineScopeProvider = TestScope(UnconfinedTestDispatcher())
         )
     }
 
