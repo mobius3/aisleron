@@ -61,6 +61,7 @@ class FabHandlerImpl(private val resourceProvider: ResourceProvider) : FabHandle
                 FabHandler.FabOption.ADD_AISLE -> R.id.fab_add_aisle
                 FabHandler.FabOption.ADD_SHOP -> R.id.fab_add_shop
                 FabHandler.FabOption.SEARCH -> R.id.fab_search
+                FabHandler.FabOption.SCAN_BARCODE -> R.id.fab_scan_barcode
             }
             activity.findViewById(resId)
         }

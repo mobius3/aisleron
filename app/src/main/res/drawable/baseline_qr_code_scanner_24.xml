@@ -1,0 +1,28 @@
+<!--
+  ~ Copyright (C) 2025-2026 aisleron.com
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as
+  ~ published by the Free Software Foundation, either version 3 of the
+  ~ License, or (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:height="24dp"
+    android:viewportHeight="24"
+    android:viewportWidth="24"
+    android:width="24dp">
+
+    <path
+        android:fillColor="?attr/colorOnSurface"
+        android:pathData="M9.5,5.5h-4v4h4v-4zM11,4v7H4V4h7zM9.5,14.5h-4v4h4v-4zM11,13v7H4v-7h7zM18.5,5.5h-4v4h4v-4zM20,4v7h-7V4h7zM13,13v3.5h3.5V13H13zM16.5,16.5V13H20v3.5h-3.5zM16.5,20V16.5H20V20h-3.5zM13,16.5V20h3.5v-3.5H13z" />
+
+</vector>

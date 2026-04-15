@@ -27,7 +27,7 @@ interface FabHandler {
     fun reset()
 
     enum class FabOption {
-        ADD_PRODUCT, ADD_AISLE, ADD_SHOP, SEARCH
+        ADD_PRODUCT, ADD_AISLE, ADD_SHOP, SEARCH, SCAN_BARCODE
     }
 
     interface FabClickedCallBack {
