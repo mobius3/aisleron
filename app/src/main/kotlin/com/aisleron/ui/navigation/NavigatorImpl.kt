@@ -50,12 +50,13 @@ class NavigatorImpl(private val bundler: Bundler) : Navigator {
     }
 
     override fun navigateToAddProduct(
-        filterType: FilterType, name: String, aisleId: Int?
+        filterType: FilterType, name: String, aisleId: Int?, barcode: String?
     ) {
         val bundle = bundler.makeAddProductBundle(
             name = name,
             inStock = filterType == FilterType.IN_STOCK,
-            aisleId = aisleId
+            aisleId = aisleId,
+            barcode = barcode
         )
 
         navigate(R.id.nav_add_product, bundle)
@@ -90,5 +91,14 @@ class NavigatorImpl(private val bundler: Bundler) : Navigator {
 
     override fun navigateToWelcome() {
         navigate(R.id.nav_welcome)
+    }
+
+    override fun navigateToBarcodeScanner(locationId: Int?, filterType: FilterType) {
+        val bundle = bundler.makeBarcodeScannerBundle(
+            scanMode = com.aisleron.ui.barcode.ScanMode.UPDATE_STATUS,
+            locationId = locationId,
+            filterType = filterType.name
+        )
+        navigate(R.id.nav_barcode_scanner, bundle)
     }
 }

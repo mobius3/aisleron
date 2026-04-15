@@ -76,6 +76,9 @@
             android:name="filterType"
             app:argType="com.aisleron.domain.FilterType"
             android:defaultValue="NEEDED" />
+        <action
+            android:id="@+id/action_nav_shopping_list_to_nav_barcode_scanner"
+            app:destination="@id/nav_barcode_scanner" />
     </fragment>
 
     <fragment

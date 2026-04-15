@@ -24,10 +24,11 @@ import com.aisleron.domain.location.LocationType
 interface Navigator {
     fun navigateToAddShop()
     fun navigateToEditShop(locationId: Int)
-    fun navigateToAddProduct(filterType: FilterType, name: String = "", aisleId: Int? = null)
+    fun navigateToAddProduct(filterType: FilterType, name: String = "", aisleId: Int? = null, barcode: String? = null)
     fun navigateToEditProduct(productId: Int)
     fun navigateToAisleGroupedProductList(locationId: Int, productFilter: FilterType)
     fun navigateToLocationGroupedProductList(locationType: LocationType, productFilter: FilterType)
     fun navigateToDefaultRoute(@IdRes destinationId: Int)
     fun navigateToWelcome()
+    fun navigateToBarcodeScanner(locationId: Int?, filterType: FilterType)
 }

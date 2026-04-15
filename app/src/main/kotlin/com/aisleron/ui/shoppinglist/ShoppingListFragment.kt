@@ -54,10 +54,14 @@ import com.aisleron.ui.bundles.AisleDialogBundle
 import com.aisleron.ui.bundles.AisleListEntry
 import com.aisleron.ui.bundles.AislePickerBundle
 import com.aisleron.ui.bundles.Bundler
+import com.aisleron.ui.bundles.ShoppingListBundle
+import com.aisleron.ui.barcode.CameraBarcodeScannerFragment
+import com.aisleron.ui.barcode.UnknownBarcodeDialogFragment
 import com.aisleron.ui.copyentity.CopyEntityDialogFragment
 import com.aisleron.ui.copyentity.CopyEntityType
 import com.aisleron.ui.loyaltycard.LoyaltyCardProvider
 import com.aisleron.ui.navigation.Navigator
+import androidx.navigation.fragment.findNavController
 import com.aisleron.ui.note.NoteDialogFragment
 import com.aisleron.ui.note.NoteParentRef
 import com.aisleron.ui.settings.ShoppingListPreferences
@@ -93,6 +97,7 @@ class ShoppingListFragment(
         get() = shoppingListPreferences.showEmptyAisles()
 
     private val shoppingListViewModel: ShoppingListViewModel by viewModel()
+    private var shoppingListBundle: ShoppingListBundle? = null
 
     override fun onResume() {
         super.onResume()
@@ -101,10 +106,10 @@ class ShoppingListFragment(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val shoppingListBundle = Bundler().getShoppingListBundle(arguments)
+        shoppingListBundle = Bundler().getShoppingListBundle(arguments)
         shoppingListViewModel.hydrate(
-            shoppingListBundle.listGrouping,
-            shoppingListBundle.filterType,
+            shoppingListBundle!!.listGrouping,
+            shoppingListBundle!!.filterType,
             shoppingListPreferences.showEmptyAisles()
         )
 
@@ -190,6 +195,7 @@ class ShoppingListFragment(
                     }
 
                     launch { collectEvents() }
+                    observeBarcodeScanResult()
                 }
             }
 
@@ -330,11 +336,70 @@ class ShoppingListFragment(
         }
     }
 
+    private fun observeBarcodeScanResult() {
+        val savedStateHandle = findNavController().currentBackStackEntry?.savedStateHandle ?: return
+        savedStateHandle.getLiveData<String>(CameraBarcodeScannerFragment.KEY_SCAN_RESULT)
+            .observe(viewLifecycleOwner) { barcode ->
+                if (barcode != null) {
+                    savedStateHandle.remove<String>(CameraBarcodeScannerFragment.KEY_SCAN_RESULT)
+
+                    lifecycleScope.launch {
+                        val result = shoppingListViewModel.handleBarcodeScanResult(barcode)
+                        showBarcodeScanResultSnackBar(result, barcode)
+                    }
+                }
+            }
+    }
+
+    private fun showBarcodeScanResultSnackBar(
+        result: ShoppingListViewModel.BarcodeScanResult, barcode: String
+    ) {
+        when (result) {
+            is ShoppingListViewModel.BarcodeScanResult.ProductUpdated -> {
+                val status = getString(
+                    if (result.inStock) R.string.menu_in_stock else R.string.menu_needed
+                )
+                val message = getString(
+                    R.string.barcode_scan_result_product_moved, result.productName, status
+                )
+                Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show()
+            }
+            is ShoppingListViewModel.BarcodeScanResult.ProductAlreadyInStatus -> {
+                val message = getString(
+                    R.string.barcode_scan_result_already_in_list, result.productName
+                )
+                Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show()
+            }
+            is ShoppingListViewModel.BarcodeScanResult.UnknownBarcode -> {
+                showUnknownBarcodeDialog(result.barcode)
+            }
+        }
+    }
+
     override fun onDestroyView() {
         searchView?.removeOnAttachStateChangeListener(searchViewListener)
         searchView = null
         fabHandler.reset()
         super.onDestroyView()
+    }
+
+    private fun showUnknownBarcodeDialog(barcode: String) {
+        val dialog = UnknownBarcodeDialogFragment.newInstance(barcode)
+        dialog.setCallbacks(
+            onCreateNewProduct = { bc ->
+                navigator.navigateToAddProduct(
+                    shoppingListViewModel.productFilter, barcode = bc
+                )
+            },
+            onBarcodeAssigned = {
+                Snackbar.make(
+                    requireView(),
+                    getString(R.string.barcode_scan_result_assigned),
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
+        )
+        dialog.show(childFragmentManager, UnknownBarcodeDialogFragment.TAG)
     }
 
     private fun initializeActionMode(
@@ -441,6 +506,7 @@ class ShoppingListFragment(
         }
 
         fabItems.add(FabHandler.FabOption.ADD_PRODUCT)
+        fabItems.add(FabHandler.FabOption.SCAN_BARCODE)
 
         fabHandler.setFabOnClickedListener(this)
         fabHandler.setFabItems(this.requireActivity(), *fabItems.toTypedArray())
@@ -720,6 +786,12 @@ class ShoppingListFragment(
                         searchMenuItem?.expandActionView()
                     }
                 }, 100)
+
+            FabHandler.FabOption.SCAN_BARCODE -> {
+                val listGrouping = shoppingListBundle?.listGrouping
+                val locationId = (listGrouping as? ShoppingListGrouping.AisleGrouping)?.locationId
+                navigator.navigateToBarcodeScanner(locationId, shoppingListViewModel.productFilter)
+            }
         }
     }
 
