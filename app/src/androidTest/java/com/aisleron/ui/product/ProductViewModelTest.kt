@@ -29,6 +29,9 @@ import com.aisleron.domain.aisle.usecase.GetAislesForLocationUseCase
 import com.aisleron.domain.aisleproduct.AisleProductRepository
 import com.aisleron.domain.aisleproduct.usecase.ChangeProductAisleUseCase
 import com.aisleron.domain.base.AisleronException
+import com.aisleron.domain.productvariant.usecase.AddProductVariantUseCase
+import com.aisleron.domain.productvariant.usecase.GetProductVariantsByProductIdUseCase
+import com.aisleron.domain.productvariant.usecase.RemoveProductVariantUseCase
 import com.aisleron.domain.location.Location
 import com.aisleron.domain.location.LocationRepository
 import com.aisleron.domain.location.LocationType
@@ -265,7 +268,10 @@ class ProductViewModelTest() : KoinTest {
             get<ApplyNoteChangesUseCase>(),
             get<GetProductMappingsUseCase>(),
             get<GetAislesForLocationUseCase>(),
-            get<ChangeProductAisleUseCase>()
+            get<ChangeProductAisleUseCase>(),
+            get<GetProductVariantsByProductIdUseCase>(),
+            get<AddProductVariantUseCase>(),
+            get<RemoveProductVariantUseCase>()
         )
 
         assertNotNull(pvm)
