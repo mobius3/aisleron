@@ -8,10 +8,10 @@
     <string name="menu_in_stock">Evde bulunanlar</string>
     <string name="menu_needed">Gerekenler</string>
     <string name="menu_settings">Ayarlar</string>
-    <string name="menu_all_shops">Bütün dükkânlar</string>
+    <string name="menu_all_shops">Tüm dükkânlar</string>
     <string name="menu_shops">Dükkânlar</string>
     <string name="menu_about">Hakkında</string>
-    <string name="menu_all_lists">Tüm Listeler</string>
+    <string name="menu_all_lists">Tüm listeler</string>
     <string name="home">Başlangıç</string>
     <string name="display_options_header">Görüntüleme seçenekleri</string>
     <string name="system_theme">Sistem teması</string>
@@ -25,10 +25,10 @@
     <string name="db_backup_success">Yedekleme tamamlandı</string>
     <string name="about_support_header">Destek</string>
     <string name="about_support_version_title">Sürüm tarihçesi</string>
-    <string name="about_support_report_issue_title">Sorun bildirin</string>
+    <string name="about_support_report_issue_title">Sorun bildirme</string>
     <string name="about_support_sourcecode_title">Kaynak kodu</string>
     <string name="about_legal_license_title">Aisleron Lisansı</string>
-    <string name="about_legal_privacy_title">Aisleron Mahremiyet politikası</string>
+    <string name="about_legal_privacy_title">Aisleron Mahremiyet Politikası</string>
     <string name="about_support_sourcecode_summary">Kaynak kodunu GitHub\'da görün</string>
     <string name="about_support_documentation_title">Dokümantasyon</string>
     <string name="welcome_title">Aisleron\'a hoşgeldiniz</string>
@@ -87,14 +87,14 @@
     <string name="db_restore_confirmation">Şimdiki veri tabanının yerine %1$s yedeğini geri yüklemek istediğinize emin misiniz?</string>
     <string name="db_restore_confirmation_title">Geri yükleme onayı</string>
     <string name="backup_folder_success">Yedekleme klasörü ayarlandı</string>
-    <string name="keep_screen_on">Ekranı açık tut</string>
-    <string name="keep_screen_on_summary">Bir liste görüntülenirken ekranın kapanmasını engelle</string>
+    <string name="keep_screen_on">Ekran açık tutulsun</string>
+    <string name="keep_screen_on_summary">Bir liste görüntülenirken ekranın kapanması engellensin</string>
     <string name="starting_list">Başlangıç listesi</string>
     <string name="use_dynamic_color">Dinamik renk</string>
     <string name="use_dynamic_color_summary">Şu anki duvar kâğıdından elde edilen sistem renkleri kullanılsın</string>
     <string name="pure_black_economy">Ekonomi</string>
-    <string name="pure_black_business_class">Business Sınıfı</string>
-    <string name="pure_black_first_class">Birinci Sınıf</string>
+    <string name="pure_black_business_class">Business Class</string>
+    <string name="pure_black_first_class">First Class</string>
     <string name="pure_black_style">Saf Siyah stil</string>
     <string name="language">Dil</string>
     <string name="system_default">Sistem varsayılanı</string>
@@ -123,11 +123,11 @@
     <string name="about_legal_header">Lisanslar ve Politikalar</string>
     <string name="about_support_version_summary">Şu anki sürüm: %1$s</string>
     <string name="about_support_report_issue_summary">Bir hata ya da özellik eklenmesi talebi gönderin</string>
-    <string name="about_legal_license_summary">GNU Affero General Public License (AGPL) sürüm 3</string>
+    <string name="about_legal_license_summary">GNU Affero Genel Kamu Lisansı (Affero General Public License - AGPL) sürüm 3</string>
     <string name="about_legal_privacy_summary">Mahremiyet politikasını siteden okuyun</string>
     <string name="about_support_documentation_summary">Dokümantasyonu siteden okuyun</string>
-    <string name="about_legal_3rdparty_title">3. taraf lisansları</string>
-    <string name="about_legal_3rdparty_summary">3. taraf lisanslarını siteden okuyun</string>
+    <string name="about_legal_3rdparty_title">Üçüncü Taraf Lisansları</string>
+    <string name="about_legal_3rdparty_summary">Üçüncü tarafların lisanslarını siteden okuyun</string>
     <string name="welcome_app_title">İlk adımlar</string>
     <string name="welcome_message">Alışveriş deneyiminizi kolaylaştırmanıza ve düzene sokmanıza yardımcı olmaktan heyeacan duyuyoruz. Başlamak için aşağıdaki seçeneklerden birini seçin:</string>
     <string name="welcome_add_own_product"><h3>Kendi ürünlerinizi ekleyin</h3> Dükkânlar, reyonlar ve ürünler ekleyerek kendi alışveriş listenizi sıfırdan oluşturmaya başlayın</string>
@@ -146,7 +146,7 @@
     <string name="tracking_checkbox_quantity">Onay kutucuğu ve miktar</string>
     <string name="tracking_default">Varsayılan</string>
     <string name="aisle">Reyon</string>
-    <string name="pin_shop">Dükkânı menüye sabitle</string>
+    <string name="pin_shop">Dükkân menüye sabitlensin</string>
     <string name="show_unmapped_products">\'Reyonu yok\' bölümündeki ürünler gösterilsin</string>
     <string name="delete_confirmation">%1$s silinsin mi?</string>
     <string name="main_fab">Ana FAB</string>
@@ -174,7 +174,7 @@
     <string name="about_contribute_translate_summary">Aisleron\'un başka dillerde çalışmasına yardımcı olun</string>
     <string name="empty_list_instructions">Sağ alttaki \"ekle\" düğmesini kullanarak ürünler ve reyonlar ekleyebilirsiniz ya da ekranın tepesindeki arama çubuğunu kullanarak ürünler bulabilir ve durumlarını veya reyon atamalarını değiştirebilirsiniz.</string>
     <string name="loyalty_card_provider_missing_message">Müşteri kartlarını görüntülemek için <b><i>%1$s</i></b> gereklidir. Daha fazla bilgi almak üzere web sitelerini açmak ister misiniz?</string>
-    <string name="menu_all_items">Bütün maddeler</string>
+    <string name="menu_all_items">Tüm maddeler</string>
     <string name="welcome_load_sample_items"><h3>Örnek maddeler yükle</h3> Uygulamanın nasıl çalıştığıyla ilgili bir fikir edinmek için örnek bir listeyle başla</string>
     <string name="empty_list_reasons">- Şu anda gereken hiçbir madde yoktur \n- Henüz hiçbir ürün ya da reyon eklenmemiştir \n- Maddeler vardır ama görünür bir reyona atanmamışlardır</string>
     <string name="tracking_none">Yok (yalnızca kaydırma)</string>
@@ -185,4 +185,6 @@
     <string name="expand_collapse_aisles">Reyon dökümlerini aç/kapa</string>
     <string name="items_selected">%1$d madde</string>
     <string name="show_location_list">%1$s Göster</string>
+    <string name="search">Ara</string>
+    <string name="search_fab">Ara FAB</string>
 </resources>

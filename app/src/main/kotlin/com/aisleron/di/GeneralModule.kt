@@ -25,9 +25,12 @@ import com.aisleron.ui.FabHandler
 import com.aisleron.ui.FabHandlerImpl
 import com.aisleron.ui.barcode.BarcodeScanner
 import com.aisleron.ui.barcode.MLKitBarcodeScanner
+import com.aisleron.ui.bundles.Bundler
 import com.aisleron.ui.loyaltycard.CatimaCardProvider
 import com.aisleron.ui.loyaltycard.LoyaltyCardProvider
 import com.aisleron.ui.loyaltycard.PackageCheckerImpl
+import com.aisleron.ui.navigation.Navigator
+import com.aisleron.ui.navigation.NavigatorImpl
 import com.aisleron.ui.resourceprovider.ResourceProvider
 import com.aisleron.ui.resourceprovider.ResourceProviderImpl
 import org.koin.dsl.module
@@ -35,6 +38,7 @@ import org.koin.dsl.module
 val generalModule = module {
     single<FabHandler> { FabHandlerImpl(get()) }
     single<ResourceProvider> { ResourceProviderImpl() }
+    single<Navigator> { NavigatorImpl(Bundler()) }
     factory<ApplicationTitleUpdateListener> { ApplicationTitleUpdateListenerImpl() }
     factory<AddEditFragmentListener> { AddEditFragmentListenerImpl() }
     factory<LoyaltyCardProvider> { CatimaCardProvider(PackageCheckerImpl()) }

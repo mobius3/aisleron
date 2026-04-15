@@ -1,6 +1,7 @@
 Mejoras:
-* Se añadió una sección "Contribuir" a la página "Acerca de".
-* Se añadieron traducciones al turco.
+* Se agregó la opción para ver la lista de productos agrupada por lugar/tienda.
+* Se agregó una sección de Contribución a la página Acerca de.
+* Se agregaron traducciones turcas.
 
 Corrección de errores:
-* Se corrigió la eliminación de recursos de idiomas del paquete de Play Store.
+* Los recursos de lenguaje fijo están siendo despojados del paquete Play Store.

@@ -109,7 +109,7 @@ class ProductViewModel(
 
     private var hydrated = false
 
-    fun hydrate(productId: Int, inStock: Boolean, targetAisleId: Int? = null) {
+    fun hydrate(productId: Int, inStock: Boolean, targetAisleId: Int? = null, name: String? = "") {
         if (hydrated) return
 
         coroutineScope.launch {
@@ -117,7 +117,7 @@ class ProductViewModel(
             _productUiState.value = ProductUiState.Loading
             product = getProduct(productId)
             _uiData.value = ProductUiData(
-                productName = product?.name.orEmpty(),
+                productName = product?.name ?: name.orEmpty(),
                 inStock = product?.inStock ?: inStock,
                 noteText = product?.note?.noteText ?: "",
                 qtyIncrement = product?.qtyIncrement ?: 1.0,

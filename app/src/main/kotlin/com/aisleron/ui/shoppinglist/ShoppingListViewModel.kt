@@ -86,7 +86,11 @@ class ShoppingListViewModel(
         get() = shoppingListCoordinator as? AisleListCoordinator
 
     val shoppingListUiState: StateFlow<ShoppingListUiState> = combine(
-        _searchQuery.debounce(debounceTime).distinctUntilChanged(),
+        _searchQuery
+            .debounce { query ->
+                if (query.isBlank()) 0L else debounceTime
+            }
+            .distinctUntilChanged(),
         _shoppingListFilters,
         _selectedSignatures
     ) { query, filters, selections ->
@@ -305,54 +309,41 @@ class ShoppingListViewModel(
     fun getSelectedItemAisleId(): Int =
         selectedListItems.singleOrNull()?.aisleId ?: -1
 
-    fun navigateToLoyaltyCard() {
+    private fun emitEvent(block: suspend () -> ShoppingListEvent?) {
         coroutineScope.launchHandling {
-            aisleListCoordinator?.let {
-                _events.emit(it.navigateToLoyaltyCardEvent())
-            }
+            val event = block()
+            event?.let { _events.emit(it) }
         }
     }
 
+    fun navigateToLoyaltyCard() {
+        emitEvent { aisleListCoordinator?.navigateToLoyaltyCardEvent() }
+    }
+
     fun navigateToEditShop() {
-        coroutineScope.launchHandling {
-            aisleListCoordinator?.let {
-                _events.emit(it.navigateToEditShopEvent())
-            }
-        }
+        emitEvent { aisleListCoordinator?.navigateToEditShopEvent() }
     }
 
     fun navigateToEditItem() {
         val item =
             selectedListItems.filterIsInstance<ShoppingListItemViewModel>().singleOrNull() ?: return
 
-        coroutineScope.launchHandling {
-            _events.emit(item.editNavigationEvent())
-        }
+        emitEvent { item.editNavigationEvent() }
     }
 
     fun navigateToAddSingleAisle() {
-        coroutineScope.launchHandling {
-            aisleListCoordinator?.let {
-                _events.emit(it.navigateToAddSingleAisleEvent())
-            }
-        }
+        emitEvent { aisleListCoordinator?.navigateToAddSingleAisleEvent() }
     }
 
     fun navigateToAddMultipleAisles() {
-        coroutineScope.launchHandling {
-            aisleListCoordinator?.let {
-                _events.emit(it.navigateToAddMultipleAislesEvent())
-            }
-        }
+        emitEvent { aisleListCoordinator?.navigateToAddMultipleAislesEvent() }
     }
 
     fun navigateToCopyDialog() {
         val item =
             selectedListItems.filterIsInstance<ShoppingListItemViewModel>().singleOrNull() ?: return
 
-        coroutineScope.launchHandling {
-            _events.emit(item.copyDialogNavigationEvent())
-        }
+        emitEvent { item.copyDialogNavigationEvent() }
     }
 
     fun navigateToNoteDialog() {
@@ -361,9 +352,7 @@ class ShoppingListViewModel(
     }
 
     fun navigateToNoteDialog(item: ShoppingListItem) {
-        coroutineScope.launchHandling {
-            _events.emit((item as ShoppingListItemViewModel).noteDialogNavigationEvent())
-        }
+        emitEvent { (item as ShoppingListItemViewModel).noteDialogNavigationEvent() }
     }
 
     fun navigateToItemLoyaltyCard() {
@@ -371,22 +360,32 @@ class ShoppingListViewModel(
             selectedListItems.filterIsInstance<LocationShoppingListItemViewModel>().singleOrNull()
                 ?: return
 
-        coroutineScope.launchHandling {
-            _events.emit(item.navigateToLoyaltyCardEvent())
-        }
+        emitEvent { item.navigateToLoyaltyCardEvent() }
     }
 
     fun navigateToLocationList() {
         val item =
             selectedListItems.filterIsInstance<LocationShoppingListItemViewModel>().singleOrNull()
+                ?: return
 
-        val productFilter = _shoppingListFilters.value?.productFilter
+        emitEvent { item.navigateToLocationListEvent(productFilter) }
+    }
 
-        if (item == null || productFilter == null) return
+    fun navigateToAddProduct() {
+        val aisle =
+            selectedListItems.filterIsInstance<AisleShoppingListItemViewModel>().singleOrNull()
 
-        coroutineScope.launchHandling {
-            _events.emit(item.navigateToLocationListEvent(productFilter))
+        emitEvent {
+            ShoppingListEvent.NavigateToAddProduct(
+                productName = _searchQuery.value,
+                productFilter = productFilter,
+                aisleId = aisle?.aisleId
+            )
         }
+    }
+
+    fun navigateToAddShop() {
+        emitEvent { ShoppingListEvent.NavigateToAddShop }
     }
 
     sealed class ShoppingListUiState {
@@ -426,6 +425,12 @@ class ShoppingListViewModel(
         data class NavigateToLocationList(
             val locationId: Int, val productFilter: FilterType
         ) : ShoppingListEvent()
+
+        data class NavigateToAddProduct(
+            val productName: String, val productFilter: FilterType, val aisleId: Int?
+        ) : ShoppingListEvent()
+
+        object NavigateToAddShop : ShoppingListEvent()
     }
 
     sealed class ListTitle {
