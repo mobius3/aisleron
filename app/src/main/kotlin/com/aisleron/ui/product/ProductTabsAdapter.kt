@@ -26,7 +26,7 @@ class ProductTabsAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
         TAB_NOTES,
         TAB_AISLES,
         TAB_INVENTORY,
-        //TAB_BARCODES
+        TAB_BARCODES
     }
 
     override fun getItemCount(): Int = ProductTab.entries.size
@@ -36,6 +36,7 @@ class ProductTabsAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
             ProductTab.TAB_NOTES.ordinal -> ProductNoteFragment()
             ProductTab.TAB_AISLES.ordinal -> ProductAislesFragment()
             ProductTab.TAB_INVENTORY.ordinal -> ProductInventoryFragment()
+            ProductTab.TAB_BARCODES.ordinal -> ProductVariantsFragment()
             else -> throw IllegalArgumentException("Invalid tab index")
         }
     }

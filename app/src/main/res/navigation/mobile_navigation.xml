@@ -116,6 +116,9 @@
         <argument
             android:name="addEditProductBundle"
             app:argType="com.aisleron.ui.bundles.AddEditProductBundle" />
+        <action
+            android:id="@+id/action_nav_add_product_to_nav_barcode_scanner"
+            app:destination="@id/nav_barcode_scanner" />
     </fragment>
     <activity
         android:id="@+id/nav_about"

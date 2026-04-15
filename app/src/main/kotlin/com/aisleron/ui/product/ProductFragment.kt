@@ -219,7 +219,7 @@ class ProductFragment(
                 ProductTabsAdapter.ProductTab.TAB_NOTES.ordinal -> getString(R.string.tab_notes)
                 ProductTabsAdapter.ProductTab.TAB_AISLES.ordinal -> getString(R.string.product_tab_aisles)
                 ProductTabsAdapter.ProductTab.TAB_INVENTORY.ordinal -> getString(R.string.product_tab_inventory)
-                //ProductTabsAdapter.ProductTab.TAB_BARCODES.ordinal -> getString(R.string.product_tab_barcodes)
+                ProductTabsAdapter.ProductTab.TAB_BARCODES.ordinal -> getString(R.string.product_tab_barcodes)
                 else -> ""
             }
         }.attach()
